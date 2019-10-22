@@ -1,0 +1,12 @@
+---
+
+- name: "APP | Symlink Storage Public Folder"
+  file:
+    src: "{{ ansistrano_release_path.stdout }}/storage/app/public"
+    dest: "{{ ansistrano_release_path.stdout }}/public/storage"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: link
+  tags:
+    - app
+    - pre

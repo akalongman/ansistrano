@@ -1,0 +1,10 @@
+---
+
+- name: "APP | Restart Horizon"
+  shell: "php artisan horizon:terminate"
+  args:
+    chdir: "{{ app_current_path }}"
+  tags:
+    - app
+    - post
+

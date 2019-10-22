@@ -1,0 +1,28 @@
+{
+    "name": "longman/ansistrano",
+    "type": "library",
+    "description": "Ansistrano configuration skeleton",
+    "keywords": [
+        "ansistrano",
+        "deploy",
+        "rollback"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/akalongman/ansistrano",
+    "support": {
+        "issues": "https://github.com/akalongman/ansistrano/issues",
+        "source": "https://github.com/akalongman/ansistrano"
+    },
+    "authors": [
+        {
+            "name": "Avtandil Kikabidze aka LONGMAN",
+            "email": "akalongman@gmail.com",
+            "homepage": "http://longman.me",
+            "role": "Maintainer, Developer"
+        }
+    ],
+    "config": {
+        "sort-packages": true,
+        "process-timeout": 3600
+    }
+}

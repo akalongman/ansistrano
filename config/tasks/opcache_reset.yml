@@ -1,0 +1,10 @@
+---
+
+- name: "APP | Reset OPCache "
+  become: "{{ app_become_on_cachetool }}"
+  shell: "bin/cachetool.phar opcache:reset"
+  args:
+    chdir: "{{ app_current_path }}"
+  tags:
+    - app
+    - post

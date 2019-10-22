@@ -1,0 +1,14 @@
+---
+- name: "Rollback Project"
+  hosts: all
+  vars:
+    # variables documentation https://github.com/ansistrano/deploy#role-variables
+    ansistrano_deploy_to: "{{ app_deploy_to }}"
+    ansistrano_version_dir: "releases"
+    ansistrano_current_dir: "current"
+    ansistrano_remove_rolled_back: no
+    ansistrano_allow_anonymous_stats: no
+
+  roles:
+    - { role: "ansistrano.rollback" }
+

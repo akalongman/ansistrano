@@ -1,0 +1,12 @@
+---
+
+- name: "APP | Add cron entry for {{ app_project_name }}"
+  cron:
+    name: "add record"
+    minute: "*"
+    hour: "*"
+    state: "present"
+    job: "cd {{ app_current_path }} && php artisan schedule:run >> /dev/null 2>&1"
+  tags:
+    - app
+    - post

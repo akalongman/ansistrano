@@ -1,0 +1,10 @@
+---
+
+- name: "APP | Restart Supervisor"
+  shell: "sudo supervisorctl reread && sudo supervisorctl restart all"
+  args:
+    chdir: "{{ app_current_path }}"
+  tags:
+    - app
+    - post
+

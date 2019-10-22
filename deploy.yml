@@ -1,0 +1,9 @@
+---
+- name: "Deploy Project"
+  hosts: all
+  any_errors_fatal: true
+  vars_files:
+    - "{{ playbook_dir }}/vars/defaults.yml"
+    - "{{ app_root_path }}/{{ app_vars_file }}"
+  roles:
+    - { role: ansistrano.deploy }

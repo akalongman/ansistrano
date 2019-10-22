@@ -1,0 +1,10 @@
+---
+
+- name: "APP | Recreate View Cache"
+  shell: "php artisan view:cache"
+  args:
+    chdir: "{{ app_current_path }}"
+  run_once: true
+  tags:
+    - app
+    - post

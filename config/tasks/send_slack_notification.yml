@@ -1,0 +1,16 @@
+---
+
+- name: "APP | Send slack notification"
+  slack:
+    token: "{{ app_slack_token }}"
+    channel: "{{ app_slack_channel }}"
+    msg: "{{ slack_msg }}"
+    color: "{{ slack_color }}"
+    parse: "full"
+    validate_certs: no
+  run_once: true
+  delegate_to: "localhost"
+  ignore_errors: True
+  tags:
+    - app
+    - post

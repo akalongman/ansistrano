@@ -1,0 +1,9 @@
+---
+
+- name: "APP | Run Composer Optimize command"
+  shell: "bin/composer optimize"
+  args:
+    chdir: "{{ app_current_path }}"
+  tags:
+    - app
+    - post

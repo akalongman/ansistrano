@@ -1,0 +1,13 @@
+---
+- include: "{{ playbook_dir }}/config/tasks/send_slack_notification.yml"
+  vars:
+    slack_msg: "
+      *{{ app_task_name }} ({{ app_environment }}) task was failed*\n
+      - - -\n
+      Task Name: ```{{ ansible_failed_task.name | default('unknown') }}```\n
+      Result: ```{{ ansible_failed_result
+                | default('{}')
+                | to_nice_json }}```
+      "
+    slack_color: "danger"
+#- include: "{{ playbook_dir }}/config/tasks/rollback.yml"

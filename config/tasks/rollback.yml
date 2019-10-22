@@ -1,0 +1,14 @@
+---
+
+- name: APP | ROLLBACK | Fetch stat of current symlink
+  stat:
+    path: "{{ ansistrano_deploy_to }}/{{ ansistrano_current_dir }}"
+  register: stat_current_link
+- name: APP | ROLLBACK | Remove not fully deployed release
+  file:
+    state: absent
+    path: "{{ ansistrano_release_path.stdout }}"
+  when: >
+    (stat_current_link.stat.islnk is not defined)
+    or
+    (ansistrano_release_path.stdout != stat_current_link.stat.lnk_source)

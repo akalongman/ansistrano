@@ -1,0 +1,27 @@
+---
+- include: "{{ playbook_dir }}/config/tasks/restart_pm2.yml"
+  when: "app_restart_pm2 is defined and app_restart_pm2|bool == true"
+
+- include: "{{ playbook_dir }}/config/tasks/opcache_reset.yml"
+  when: "app_reset_opcache is defined and app_reset_opcache|bool == true"
+
+- include: "{{ playbook_dir }}/config/tasks/optimize_post.yml"
+  when: "app_is_backend is defined and app_is_backend|bool == true"
+
+#- include: "{{ playbook_dir }}/config/tasks/copy-supervisor-files.yml"
+
+- include: "{{ playbook_dir }}/config/tasks/restart_supervisor.yml"
+  when: "app_restart_supervisor is defined and app_restart_supervisor|bool == true"
+
+- include: "{{ playbook_dir }}/config/tasks/restart_horizon.yml"
+  when: "app_restart_horizon is defined and app_restart_horizon|bool == true"
+
+- include: "{{ playbook_dir }}/config/tasks/add_cron_entry.yml"
+  when: "app_add_cron_entry is defined and app_add_cron_entry|bool == true"
+
+- include: "{{ playbook_dir }}/config/tasks/send_slack_notification.yml"
+  when: app_slack_token is defined and app_slack_token != ""
+  vars:
+    slack_msg: "*{{ app_task_name }} ({{ app_environment }}) task was completed*"
+    slack_color: "good"
+

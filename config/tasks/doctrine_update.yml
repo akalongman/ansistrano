@@ -1,0 +1,10 @@
+---
+
+- name: "APP | Update Doctrine Schema and Proxies"
+  shell: "bin/composer doctrine-update"
+  args:
+    chdir: "{{ app_current_path }}"
+  run_once: true
+  tags:
+    - app
+    - post

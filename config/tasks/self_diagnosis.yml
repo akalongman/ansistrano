@@ -1,0 +1,10 @@
+---
+
+- name: "APP | Run Self-Diagnostic"
+  shell: "php artisan self-diagnosis {{ app_environment }}"
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  tags:
+    - app
+    - pre
+  #ignore_errors: True

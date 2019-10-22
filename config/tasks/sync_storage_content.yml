@@ -1,0 +1,12 @@
+---
+
+- name: "APP | Sync Storage Content"
+  synchronize:
+    src: "{{ ansistrano_deploy_from }}/storage"
+    dest: "{{ app_deploy_to }}/shared"
+    archive: no
+    recursive: yes
+  run_once: true
+  tags:
+    - app
+    - pre
