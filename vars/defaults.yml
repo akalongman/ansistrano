@@ -9,6 +9,7 @@ ansistrano_keep_releases: 10
 app_task_name: "Deploy {{ app_project_name }}"
 app_root_path: "{{ ansistrano_deploy_from }}"
 app_current_path: "{{ ansistrano_deploy_to }}/{{ ansistrano_current_dir }}"
+app_writeable_paths: []
 
 ansistrano_shared_paths: []
 ansistrano_shared_files: []

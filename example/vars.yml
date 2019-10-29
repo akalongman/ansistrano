@@ -1,0 +1,10 @@
+---
+app_writeable_paths:
+  - "data"
+  - "bootstrap/cache"
+
+ansistrano_shared_paths:
+  - "data"
+
+ansistrano_rsync_extra_params:
+  - "--exclude-from={{ app_root_path }}/build/.rsync_excludes"

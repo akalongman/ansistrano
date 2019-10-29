@@ -1,16 +1,12 @@
 ---
-- include: "{{ playbook_dir }}/config/tasks/set_storage_folder_permissions.yml"
-  when: "app_is_backend is defined and app_is_backend|bool == true"
-
-- include: "{{ playbook_dir }}/config/tasks/set_cache_folder_permissions.yml"
-  when: "app_is_backend is defined and app_is_backend|bool == true"
+- include: "{{ playbook_dir }}/config/tasks/set_writeable_permissions.yml"
+  when: "app_set_writeable_permissions is defined and app_set_writeable_permissions|bool == true"
 
 - include: "{{ playbook_dir }}/config/tasks/symlink_storage_public.yml"
-
-#- include: "{{ playbook_dir }}/config/tasks/symlink_uploads.yml"
+  when: "app_symlink_storage_public is defined and app_symlink_storage_public|bool == true"
 
 - include: "{{ playbook_dir }}/config/tasks/optimize_pre.yml"
-  when: "app_is_backend is defined and app_is_backend|bool == true"
+  when: "app_optimize_pre is defined and app_optimize_pre|bool == true"
 
 - include: "{{ playbook_dir }}/config/tasks/self_diagnosis.yml"
   when: "app_run_self_diagnosis is defined and app_run_self_diagnosis|bool == true"
