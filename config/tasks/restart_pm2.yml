@@ -1,9 +1,0 @@
----
-
-- name: "APP | Restart PM2"
-  shell: "pm2 restart pm2.config.yml --only socket"
-  args:
-    chdir: "{{ app_current_path }}"
-  tags:
-    - app
-    - post

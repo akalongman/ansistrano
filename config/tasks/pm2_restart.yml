@@ -1,0 +1,9 @@
+---
+
+- name: "APP | Restart PM2 ({{ app_pm2_script_name }})"
+  shell: "pm2 restart pm2.config.yml --only {{ app_pm2_script_name }}"
+  args:
+    chdir: "{{ app_current_path }}"
+  tags:
+    - app
+    - post

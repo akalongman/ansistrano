@@ -1,6 +1,6 @@
 ---
-- include: "{{ playbook_dir }}/config/tasks/restart_pm2.yml"
-  when: "app_restart_pm2 is defined and app_restart_pm2|bool == true"
+- include: "{{ playbook_dir }}/config/tasks/pm2_restart.yml"
+  when: "app_pm2_restart is defined and app_pm2_restart|bool == true"
 
 - include: "{{ playbook_dir }}/config/tasks/opcache_reset.yml"
   when: "app_reset_opcache is defined and app_reset_opcache|bool == true"
