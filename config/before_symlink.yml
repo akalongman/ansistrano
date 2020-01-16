@@ -13,3 +13,6 @@
 
 - include: "{{ playbook_dir }}/config/tasks/self_diagnosis.yml"
   when: "app_run_self_diagnosis is defined and app_run_self_diagnosis|bool == true"
+
+- include: "{{ playbook_dir }}/config/tasks/doctrine_update.yml"
+  when: "app_doctrine_update is defined and app_doctrine_update|bool == true"

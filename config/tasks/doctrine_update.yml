@@ -1,7 +1,7 @@
 ---
 
-- name: "APP | Update Doctrine Schema and Proxies"
-  shell: "bin/composer doctrine-update"
+- name: "APP | Update Doctrine Schema"
+  shell: "php artisan doctrine:schema:update --force"
   args:
     chdir: "{{ app_current_path }}"
   run_once: true
