@@ -1,0 +1,7 @@
+---
+
+- name: "APP | Restart php-fpm"
+  shell: "sudo systemctl reload php74-php-fpm"
+  tags:
+    - app
+    - post

@@ -5,6 +5,9 @@
 - include: "{{ playbook_dir }}/config/tasks/opcache_reset.yml"
   when: "app_reset_opcache is defined and app_reset_opcache|bool == true"
 
+- include: "{{ playbook_dir }}/config/tasks/restart_phpfpm.yml"
+  when: "app_restart_phpfpm is defined and app_restart_phpfpm|bool == true"
+
 - include: "{{ playbook_dir }}/config/tasks/optimize_post.yml"
   when: "app_optimize_post is defined and app_optimize_post|bool == true"
 
