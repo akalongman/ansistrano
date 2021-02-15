@@ -1,9 +1,11 @@
 ---
 
 - name: "APP | Restart PM2 ({{ app_pm2_script_name }})"
-  shell: "pm2 restart pm2.config.yml --only {{ app_pm2_script_name }}"
+  shell: ". $NVM_DIR/nvm.sh && pm2 restart pm2.config.yml --only {{ app_pm2_script_name }}"
   args:
     chdir: "{{ app_current_path }}"
+  environment:
+    NVM_DIR: "{{ ansible_env.HOME }}/.nvm"
   tags:
     - app
     - post
