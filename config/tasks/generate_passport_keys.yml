@@ -1,0 +1,11 @@
+---
+
+- name: "APP | Generate Passport Keys"
+  shell: "php artisan passport:keys"
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  run_once: True
+  ignore_errors: True
+  tags:
+    - app
+    - pre

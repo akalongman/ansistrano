@@ -8,6 +8,9 @@
 - include: "{{ playbook_dir }}/config/tasks/doctrine_prepare.yml"
   when: "app_doctrine_prepare is defined and app_doctrine_prepare|bool == true"
 
+- include: "{{ playbook_dir }}/config/tasks/generate_passport_keys.yml"
+  when: "app_generate_passport_keys is defined and app_generate_passport_keys|bool == true"
+
 - include: "{{ playbook_dir }}/config/tasks/optimize_pre.yml"
   when: "app_optimize_pre is defined and app_optimize_pre|bool == true"
 
