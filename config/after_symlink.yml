@@ -16,6 +16,9 @@
 - include: "{{ playbook_dir }}/config/tasks/restart_supervisor.yml"
   when: "app_restart_supervisor is defined and app_restart_supervisor|bool == true"
 
+- include: "{{ playbook_dir }}/config/tasks/restart_queue.yml"
+  when: "app_restart_queue is defined and app_restart_queue|bool == true"
+
 - include: "{{ playbook_dir }}/config/tasks/restart_horizon.yml"
   when: "app_restart_horizon is defined and app_restart_horizon|bool == true"
 
