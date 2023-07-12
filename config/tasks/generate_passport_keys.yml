@@ -4,8 +4,8 @@
   shell: "php artisan passport:keys"
   args:
     chdir: "{{ ansistrano_release_path.stdout }}"
-  run_once: True
-  ignore_errors: True
+  run_once: true
+  ignore_errors: true
   tags:
     - app
     - pre

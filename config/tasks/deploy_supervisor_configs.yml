@@ -2,7 +2,7 @@
 
 - name: "APP | Deploy Supervisor configs for {{ app_project_name }}"
   synchronize:
-    delete: True,
+    delete: true,
     src: "{{ ansistrano_release_path.stdout }}/build/deploy/supervisor/{{ app_environment }}"
     dest: "/etc/supervisord.d"
   tags:
