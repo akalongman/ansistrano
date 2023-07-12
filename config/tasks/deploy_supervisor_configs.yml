@@ -6,9 +6,8 @@
     src: "{{ app_current_path }}/build/deploy/supervisor/{{ app_environment }}/"
     dest: "/etc/supervisord.d"
     delete: true
-    become_user: "{{ ansible_user }}"
   run_once: true
-#  delegate_to: "localhost"
+  delegate_to: "{{ inventory_hostname }}"
   tags:
     - app
     - post
