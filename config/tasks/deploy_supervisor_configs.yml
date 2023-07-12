@@ -1,0 +1,29 @@
+---
+
+- name: "APP | Locate Supervisor configs on {{ app_project_name }}"
+  find:
+    paths: "/etc/supervisor.d/"
+    hidden: False
+    recurse: False
+    file_type: ini
+  register: collected_files
+  tags:
+    - app
+    - post
+
+- name: "APP | Delete Supervisor configs on {{ app_project_name }}"
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: collected_files.files
+  tags:
+    - app
+    - post
+
+- name: "APP | Deploy Supervisor configs on {{ app_project_name }}"
+  synchronize:
+    src: "{{ ansistrano_release_path.stdout }}/build/deploy/supervisor/{{ app_environment }}"
+    dest: "/etc/supervisord.d"
+  tags:
+    - app
+    - post

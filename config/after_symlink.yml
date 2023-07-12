@@ -11,7 +11,8 @@
 - include: "{{ playbook_dir }}/config/tasks/optimize_post.yml"
   when: "app_optimize_post is defined and app_optimize_post|bool == true"
 
-#- include: "{{ playbook_dir }}/config/tasks/copy-supervisor-files.yml"
+- include: "{{ playbook_dir }}/config/tasks/deploy_supervisor_configs.yml"
+  when: "app_deploy_supervisor_configs is defined and app_deploy_supervisor_configs|bool == true"
 
 - include: "{{ playbook_dir }}/config/tasks/restart_supervisor.yml"
   when: "app_restart_supervisor is defined and app_restart_supervisor|bool == true"
