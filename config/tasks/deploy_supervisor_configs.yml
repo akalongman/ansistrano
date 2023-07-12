@@ -7,7 +7,7 @@
     dest: "/etc/supervisord.d"
     delete: true
   run_once: true
-  delegate_to: "localhost"
+#  delegate_to: "localhost"
   tags:
     - app
     - post
