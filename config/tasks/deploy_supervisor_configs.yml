@@ -5,7 +5,7 @@
     paths: "/etc/supervisor.d/"
     hidden: False
     recurse: False
-    file_type: ini
+    file_type: file
   register: collected_files
   tags:
     - app
