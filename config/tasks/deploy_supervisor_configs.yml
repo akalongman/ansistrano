@@ -1,12 +1,8 @@
 ---
 
 - name: "APP | Deploy Supervisor configs for {{ app_project_name }}"
-#  become: true
-#  synchronize:
-#    src: "{{ app_current_path }}/build/deploy/supervisor/{{ app_environment }}/"
-#    dest: "/etc/supervisord.d"
-#    delete: true
-  shell: "sudo rsync -av --delete {{ app_current_path }}/build/deploy/supervisor/{{ app_environment }}/ /etc/supervisord.d"
+  become: true
+  shell: "rsync -av --delete {{ app_current_path }}/build/deploy/supervisor/{{ app_environment }}/ /etc/supervisord.d"
   run_once: true
   delegate_to: "{{ inventory_hostname }}"
   tags:
