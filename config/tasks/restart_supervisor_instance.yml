@@ -1,0 +1,11 @@
+---
+
+- name: "APP | Restart Supervisor Instance"
+  become: true
+  service:
+    name: supervisord
+    state: restarted
+  tags:
+    - app
+    - post
+
