@@ -1,10 +1,7 @@
 ---
 
 - name: "APP | Restart Supervisor Instance"
-  become: true
-  service:
-    name: supervisord
-    state: restarted
+  shell: "sudo systemctl restart supervisord"
   tags:
     - app
     - post
