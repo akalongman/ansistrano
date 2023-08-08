@@ -16,3 +16,11 @@
     - app
     - pre
 
+- name: "APP | Recreate Event Cache"
+  shell: "php artisan event:cache"
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}"
+  tags:
+    - app
+    - pre
+
