@@ -1,35 +1,35 @@
 ---
-- include: "{{ playbook_dir }}/config/tasks/pm2_restart.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/pm2_restart.yml"
   when: "app_pm2_restart is defined and app_pm2_restart|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/opcache_reset.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/opcache_reset.yml"
   when: "app_reset_opcache is defined and app_reset_opcache|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/restart_phpfpm.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/restart_phpfpm.yml"
   when: "app_restart_phpfpm is defined and app_restart_phpfpm|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/optimize_post.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/optimize_post.yml"
   when: "app_optimize_post is defined and app_optimize_post|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/deploy_supervisor_configs.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/deploy_supervisor_configs.yml"
   when: "app_deploy_supervisor_configs is defined and app_deploy_supervisor_configs|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/restart_supervisor_instance.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/restart_supervisor_instance.yml"
   when: "app_restart_supervisor_instance is defined and app_restart_supervisor_instance|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/restart_supervisor.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/restart_supervisor.yml"
   when: "app_restart_supervisor is defined and app_restart_supervisor|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/restart_queue.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/restart_queue.yml"
   when: "app_restart_queue is defined and app_restart_queue|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/restart_horizon.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/restart_horizon.yml"
   when: "app_restart_horizon is defined and app_restart_horizon|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/add_cron_entry.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/add_cron_entry.yml"
   when: "app_add_cron_entry is defined and app_add_cron_entry|bool == true"
 
-- include: "{{ playbook_dir }}/config/tasks/send_slack_notification.yml"
+- import_tasks: "{{ playbook_dir }}/config/tasks/send_slack_notification.yml"
   when: app_slack_token is defined and app_slack_token != ""
   vars:
     slack_msg: "*{{ app_task_name }} ({{ app_environment }}) task was completed*"
