@@ -1,13 +1,5 @@
 ---
 
-- name: "APP | Debug Sync Storage Content"
-  debug:
-    msg: "src: {{ ansistrano_deploy_from }}/storage, dest: {{ app_deploy_to }}/shared"
-  run_once: true
-  tags:
-    - app
-    - pre
-
 - name: "APP | Sync Storage Content"
   synchronize:
     src: "{{ ansistrano_deploy_from }}/storage"
