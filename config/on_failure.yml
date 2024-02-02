@@ -1,5 +1,5 @@
 ---
-- import_tasks: "{{ playbook_dir }}/config/tasks/send_slack_notification.yml"
+- include_tasks: "{{ playbook_dir }}/config/tasks/send_slack_notification.yml"
   vars:
     slack_msg: "
       *{{ app_task_name }} ({{ app_environment }}) task was failed*\n
@@ -10,4 +10,4 @@
                 | to_nice_json }}```
       "
     slack_color: "danger"
-#- import_tasks: "{{ playbook_dir }}/config/tasks/rollback.yml"
+#- include_tasks: "{{ playbook_dir }}/config/tasks/rollback.yml"

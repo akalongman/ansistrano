@@ -1,3 +1,3 @@
 ---
-- import_tasks: "{{ playbook_dir }}/config/tasks/sync_storage_content.yml"
+- include_tasks: "{{ playbook_dir }}/config/tasks/sync_storage_content.yml"
   when: "app_sync_storage_folder is defined and app_sync_storage_folder|bool == true"
