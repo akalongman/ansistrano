@@ -1,10 +1,10 @@
 ---
 
 - name: "APP | Restart Supervisor"
-  shell: "sudo supervisorctl reread && sudo supervisorctl restart all"
-  args:
-    chdir: "{{ app_current_path }}"
+  become: true
+  ansible.builtin.systemd:
+    name: supervisord
+    state: restarted
   tags:
     - app
     - post
-

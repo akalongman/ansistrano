@@ -1,0 +1,14 @@
+---
+
+- name: "APP | Create SupervisorD Configuration"
+  become: true
+  ansible.builtin.template:
+    src: "{{ app_current_path }}/build/deploy/supervisor/{{ app_environment }}.j2"
+    dest: "/etc/supervisord.d/{{ app_domain }}.ini"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  tags:
+    - server
+    - app
+    - post

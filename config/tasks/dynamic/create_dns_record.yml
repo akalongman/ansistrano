@@ -5,7 +5,7 @@
   amazon.aws.route53:
     state: present
     zone: "{{ app_domain_name }}"
-    record: "{{ app_dynamic_domain }}"
+    record: "{{ app_domain }}"
     type: A
     ttl: 7200
     value: "{{ app_resolve_ips }}"

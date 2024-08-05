@@ -1,11 +1,10 @@
 ---
 
 - name: "APP | Dynamic | Setup Mount for Storage"
-  user: "{{ ansible_user }}"
   become: true
   ansible.posix.mount:
     src: "{{ app_dynamic_mount_path }}"
-    path: "/var/www/{{ app_dynamic_domain }}/api/shared/storage"
+    path: "/var/www/{{ app_domain }}/api/shared/storage"
     opts: hard,proto=tcp,rw,noatime,nodiratime,nolock
     state: mounted
     fstype: nfs

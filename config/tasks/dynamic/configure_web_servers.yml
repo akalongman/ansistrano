@@ -2,7 +2,6 @@
 
 - name: "APP | Dynamic | Configure Web Servers"
   become: true
-  user: "{{ ansible_user }}"
   handlers:
     - name: RestartNginx
       ansible.builtin.systemd:
@@ -13,7 +12,7 @@
       register: nginx_configuration
       ansible.builtin.template:
         src: "{{ app_current_path }}/build/deploy/templates/nginx-dynamic-vhost.conf.j2"
-        dest: "/etc/nginx/conf.d/{{ app_dynamic_domain }}.conf"
+        dest: "/etc/nginx/conf.d/{{ app_domain }}.conf"
         mode: "0644"
         backup: true
       notify: RestartNginx

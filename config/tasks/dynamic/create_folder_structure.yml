@@ -1,7 +1,6 @@
 ---
 
 - name: "APP | Dynamic | Create Folder Structure"
-  user: "{{ ansible_user }}"
   become: true
   ansible.builtin.file:
     path: "{{ item }}"
@@ -10,10 +9,10 @@
     state: directory
     mode: "0755"
   with_items:
-    - "/var/www/{{ app_dynamic_domain }}/app/releases"
-    - "/var/www/{{ app_dynamic_domain }}/api/releases"
-    - "/var/www/{{ app_dynamic_domain }}/api/shared/storage"
-    - "/mnt/dynamic-deploy-{{ app_project_name | lower }}/{{ app_dynamic_domain }}"
+    - "/var/www/{{ app_domain }}/app/releases"
+    - "/var/www/{{ app_domain }}/api/releases"
+    - "/var/www/{{ app_domain }}/api/shared/storage"
+    - "/mnt/dynamic-deploy-{{ app_project_name | lower }}/{{ app_domain }}"
   tags:
     - server
     - dynamic
