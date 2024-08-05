@@ -4,7 +4,7 @@
   become: true
   register: nginx_configuration
   ansible.builtin.template:
-    src: "{{ app_current_path }}/build/deploy/nginx/{{ app_environment }}.conf.j2"
+    src: "{{ ansistrano_deploy_from }}/build/deploy/nginx/{{ app_environment }}.conf.j2"
     dest: "/etc/nginx/conf.d/{{ app_domain }}.conf"
     mode: "0644"
     backup: true
