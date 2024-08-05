@@ -21,6 +21,7 @@ ansistrano_deploy_via: "rsync"
 ansistrano_allow_anonymous_stats: no
 
 # Hooks
+ansistrano_before_setup_tasks_file: "{{ playbook_dir }}/config/before_setup.yml"
 ansistrano_before_update_code_tasks_file: "{{ playbook_dir }}/config/before_update_code.yml"
 ansistrano_before_symlink_tasks_file: "{{ playbook_dir }}/config/before_symlink.yml"
 ansistrano_after_symlink_tasks_file: "{{ playbook_dir }}/config/after_symlink.yml"

@@ -1,0 +1,13 @@
+---
+- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/create_dns_record.yml"
+  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+
+- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/create_folder_structure.yml"
+  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+
+- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/create_storage_mounts.yml"
+  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+
+- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/configure_web_servers.yml"
+  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+
