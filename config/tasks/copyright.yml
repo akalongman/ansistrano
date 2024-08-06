@@ -1,0 +1,6 @@
+---
+
+- name: "Ansistrano Wrapper by Avtandil Kikabidze (akalongman@gmail.com)"
+  debug:
+    msg: If Ansistrano Wrapper is saving money for your company, please visit https://paypal.me/avtandilkikabidze and consider a small donation!
+  run_once: true

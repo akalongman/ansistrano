@@ -1,4 +1,4 @@
-# Ansistrano Skeleton
+# Ansistrano Wrapper
 
 This project is wrapper for [ansistrano](https://ansistrano.com/)
 
