@@ -2,7 +2,7 @@
 
 - name: "APP | Add cron entry for {{ app_project_name }}"
   cron:
-    name: "add record"
+    name: "Scheduler for {{ app_domain }}"
     minute: "*"
     hour: "*"
     state: "present"
