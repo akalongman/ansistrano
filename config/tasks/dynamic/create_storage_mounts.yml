@@ -8,6 +8,7 @@
     opts: hard,proto=tcp,rw,noatime,nodiratime,nolock
     state: mounted
     fstype: nfs
+  when: app_dynamic_mount_path is defined
   tags:
     - server
     - dynamic
