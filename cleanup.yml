@@ -5,26 +5,26 @@
   vars_files:
     - "{{ playbook_dir }}/vars/defaults.yml"
     - "{{ app_root_path }}/{{ app_vars_file }}"
+  tasks:
+    - include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_dns_record.yml"
+      when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_dns_record.yml"
-  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+    - include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_folder_structure.yml"
+      when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_folder_structure.yml"
-  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+    - include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_storage_mounts.yml"
+      when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_storage_mounts.yml"
-  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+    - include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_nginx_configuration.yml"
+      when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_nginx_configuration.yml"
-  when: "app_dynamic_deploy is defined and app_dynamic_deploy|bool == true"
+    - include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_cron_entry.yml"
+      when: "app_add_cron_entry is defined and app_add_cron_entry|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_cron_entry.yml"
-  when: "app_add_cron_entry is defined and app_add_cron_entry|bool == true"
+    - include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_supervisor_config.yml"
+      when: "app_create_supervisor_config is defined and app_create_supervisor_config|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/dynamic/cleanup/remove_supervisor_config.yml"
-  when: "app_create_supervisor_config is defined and app_create_supervisor_config|bool == true"
+    - include_tasks: "{{ playbook_dir }}/config/tasks/restart_supervisor.yml"
+      when: "app_restart_supervisor is defined and app_restart_supervisor|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/restart_supervisor.yml"
-  when: "app_restart_supervisor is defined and app_restart_supervisor|bool == true"
-
-- include_tasks: "{{ playbook_dir }}/config/tasks/copyright.yml"
+    - include_tasks: "{{ playbook_dir }}/config/tasks/copyright.yml"
