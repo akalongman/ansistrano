@@ -1,0 +1,9 @@
+---
+
+- name: "APP | Dynamic | Remove Mount for Storage"
+  become: true
+  ansible.posix.mount:
+    src: "{{ app_dynamic_mount_path }}"
+    path: "/var/www/{{ app_domain }}/api/shared/storage"
+    state: absent
+  when: app_dynamic_mount_path is defined

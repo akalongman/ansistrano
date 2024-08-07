@@ -1,0 +1,16 @@
+---
+
+- name: "APP | Dynamic | Remove Nginx VHost Configuration"
+  become: true
+  register: nginx_configuration
+  ansible.builtin.file:
+    path: "/etc/nginx/conf.d/{{ app_domain }}.conf"
+    state: absent
+  when: app_dynamic_create_vhost is defined and app_dynamic_create_vhost|bool == true
+
+- name: "APP | Dynamic | Restart Nginx"
+  become: true
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+  when: nginx_configuration.changed

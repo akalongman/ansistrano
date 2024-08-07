@@ -1,0 +1,27 @@
+---
+- name: "APP | Dynamic | Retrieve the details for {{ app_domain }}"
+  delegate_to: localhost
+  amazon.aws.route53:
+    state: get
+    zone: "{{ app_domain_name }}"
+    record: "{{ app_domain }}"
+    type: A
+  register: rec
+  run_once: true
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ app_aws_access_key_id }}"
+    AWS_SECRET_ACCESS_KEY: "{{ app_aws_secret_access_key }}"
+
+- name: "APP | Dynamic | Remove DNS Record via AWS Route53 API"
+  delegate_to: localhost
+  amazon.aws.route53:
+    state: absent
+    zone: "{{ app_domain_name }}"
+    record: "{{ rec.set.record }}"
+    type: "{{ rec.set.type }}"
+    ttl: "{{ rec.set.ttl }}"
+    value: "{{ rec.set.value }}"
+  run_once: true
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ app_aws_access_key_id }}"
+    AWS_SECRET_ACCESS_KEY: "{{ app_aws_secret_access_key }}"

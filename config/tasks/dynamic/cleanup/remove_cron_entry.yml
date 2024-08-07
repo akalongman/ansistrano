@@ -1,0 +1,8 @@
+---
+
+- name: "APP | Dynamic | Remove cron entry for {{ app_project_name }}"
+  cron:
+    name: "Scheduler for {{ app_domain }}"
+    minute: "*"
+    hour: "*"
+    state: "absent"
