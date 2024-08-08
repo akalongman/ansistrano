@@ -12,7 +12,7 @@
     - "/var/www/{{ app_domain }}/app/releases"
     - "/var/www/{{ app_domain }}/api/releases"
     - "/var/www/{{ app_domain }}/api/shared/storage"
-    - "/mnt/dynamic-deploy-{{ app_project_name | lower }}/{{ app_domain }}"
+    - "/mnt/dynamic-deploy-{{ app_project_group | lower }}/{{ app_domain }}"
   tags:
     - server
     - dynamic
