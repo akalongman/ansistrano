@@ -1,9 +1,9 @@
 ---
 
-- name: "APP | Create SupervisorD Configuration"
+- name: "APP | + 'eate SupervisorD Configuration"
   become: true
   ansible.builtin.template:
-    src: "{{ ansistrano_deploy_from }}/{{ app_supervisor_config_path | default('build/deploy/supervisor/{{ app_environment }}.conf.j2') }}"
+    src: "{{ ansistrano_deploy_from }}/{{ app_supervisor_config_path | default('build/deploy/supervisor/' + app_environment + '.conf.j2') }}"
     dest: "/etc/supervisord.d/{{ app_domain }}.ini"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
