@@ -9,12 +9,12 @@
     - pre
 
 - name: "APP | Recreate Routes Cache"
-  shell: "php artisan route:cache"
+  shell: "{{ app_cmd_cache_routes | default('php artisan route:cache') }}"
   args:
     chdir: "{{ ansistrano_release_path.stdout }}"
   tags:
     - app
-    - pre
+     - pre
 
 - name: "APP | Recreate Event Cache"
   shell: "php artisan event:cache"
