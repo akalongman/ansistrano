@@ -1,7 +1,8 @@
 ---
 
 - name: "APP | Set permissions to writeable paths"
-  shell: "sudo chmod -R 777 {{ item }}"
+  become: "{{ app_become_on_set_permissions }}"
+  shell: "chmod -R 777 {{ item }}"
   with_items: "{{ app_writeable_paths }}"
   args:
     chdir: "{{ ansistrano_release_path.stdout }}"
