@@ -1,5 +1,7 @@
 ---
 
+## DEPRECATED: This task is deprecated and will be removed in a future release.
+
 - name: "APP | Restart Supervisor Instance"
   shell: "sudo systemctl restart supervisord"
   tags:

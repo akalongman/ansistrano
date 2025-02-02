@@ -1,9 +1,0 @@
----
-
-- name: "APP | Set cache folder permissions"
-  shell: "sudo chmod -R 777 bootstrap/cache"
-  args:
-    chdir: "{{ ansistrano_release_path.stdout }}"
-  tags:
-    - app
-    - pre
