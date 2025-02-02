@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Reset OPCache"
-  become: "{{ app_become_on_cachetool }}"
+  become: "{{ app_become_on_cachetool | default(false) }}"
   shell: "bin/cachetool.phar opcache:reset --fcgi={{ app_fcgi_connection | default('127.0.0.1:9000') }}"
   args:
     chdir: "{{ app_current_path }}"

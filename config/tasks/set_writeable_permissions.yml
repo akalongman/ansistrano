@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Set permissions to writeable paths"
-  become: "{{ app_become_on_set_permissions }}"
+  become: "{{ app_become_on_set_permissions | default(false) }}"
   shell: "chmod -R 777 {{ item }}"
   with_items: "{{ app_writeable_paths }}"
   args:
