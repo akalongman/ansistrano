@@ -3,7 +3,7 @@
 - name: "APP | Restart Supervisor"
   become: true
   ansible.builtin.systemd:
-    name: supervisord
+    name: "{{ app_supervisor_service_name | default('supervisord') }}"
     state: restarted
   tags:
     - app
