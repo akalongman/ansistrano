@@ -4,8 +4,8 @@
   file:
     src: "{{ ansistrano_release_path.stdout }}/storage/{{ item }}"
     dest: "{{ ansistrano_release_path.stdout }}/public/{{ item }}"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ app_deployer_user | default(ansible_user) }}"
+    group: "{{ app_deployer_group | default(ansible_user) }}"
     state: link
   with_items:
     - "uplfiles"

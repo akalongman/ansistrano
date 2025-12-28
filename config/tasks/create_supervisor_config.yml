@@ -5,8 +5,8 @@
   ansible.builtin.template:
     src: "{{ ansistrano_deploy_from }}/{{ app_supervisor_config_path | default('build/deploy/supervisor/' + app_environment + '.conf.j2') }}"
     dest: "{{ app_supervisor_config_dest | default('/etc/supervisord.d') }}/{{ app_domain }}.ini"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: "{{ app_deployer_user | default(ansible_user) }}"
+    group: "{{ app_deployer_group | default(ansible_user) }}"
     mode: "0644"
   tags:
     - server
