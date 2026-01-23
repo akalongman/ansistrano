@@ -6,7 +6,7 @@
     dest: "{{ app_deploy_to }}/shared"
     archive: no
     recursive: yes
-  run_once: true
+  run_once: "{{ app_sync_storage_folder_once | default(false) }}"
   tags:
     - app
     - pre
