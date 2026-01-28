@@ -1,0 +1,14 @@
+---
+
+- name: "APP | Deploy SupervisorD Horizon Configuration"
+  become: true
+  ansible.builtin.template:
+    src: "{{ ansistrano_deploy_from }}/{{ app_supervisor_horizon_config_path | default('build/deploy/supervisor/' + app_environment + '-horizon.conf.j2') }}"
+    dest: "{{ app_supervisor_config_dest | default('/etc/supervisord.d') }}/{{ app_domain }}-horizon.ini"
+    owner: "{{ app_deployer_user | default(ansible_user) }}"
+    group: "{{ app_deployer_group | default(ansible_user) }}"
+    mode: "0644"
+  tags:
+    - server
+    - app
+    - post

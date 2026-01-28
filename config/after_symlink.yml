@@ -11,8 +11,11 @@
 - include_tasks: "{{ playbook_dir }}/config/tasks/optimize_post.yml"
   when: "app_optimize_post is defined and app_optimize_post|bool == true"
 
-- include_tasks: "{{ playbook_dir }}/config/tasks/deploy_supervisor_configs.yml"
-  when: "app_deploy_supervisor_configs is defined and app_deploy_supervisor_configs|bool == true"
+- include_tasks: "{{ playbook_dir }}/config/tasks/laravel/deploy_supervisor_horizon_config.yml"
+  when: "app_deploy_supervisor_horizon_config is defined and app_deploy_supervisor_horizon_config|bool == true"
+
+- include_tasks: "{{ playbook_dir }}/config/tasks/laravel/deploy_supervisor_reverb_config.yml"
+  when: "app_deploy_supervisor_reverb_config is defined and app_deploy_supervisor_reverb_config|bool == true"
 
 - include_tasks: "{{ playbook_dir }}/config/tasks/create_supervisor_config.yml"
   when: "app_create_supervisor_config is defined and app_create_supervisor_config|bool == true"

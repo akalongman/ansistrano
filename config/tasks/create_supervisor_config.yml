@@ -1,5 +1,7 @@
 ---
 
+# Deprecated. Use laravel/* scripts
+
 - name: "APP | Create SupervisorD Configuration"
   become: true
   ansible.builtin.template:
