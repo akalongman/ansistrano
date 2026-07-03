@@ -109,6 +109,12 @@ Steps run after the symlink flip (they operate on the live `current` release):
 | `app_restart_horizon` | bool | Runs `horizon:terminate` so Horizon respawns on the new release. |
 | `app_add_cron_entry` | bool | Installs a per-minute `schedule:run` cron entry. |
 
+Supervisor config filenames default to the RHEL layout (`/etc/supervisord.d/<domain>.ini`).
+For the Debian/Ubuntu layout, override both the directory and the extension, for example
+`app_supervisor_config_dest: /etc/supervisor/conf.d` and `app_supervisor_config_ext: conf`.
+The same two variables also drive the Horizon and Reverb config filenames and the dynamic
+cleanup that removes them.
+
 The presence of a non-empty `app_slack_token` enables a success notification at the end
 of a deploy and a failure notification if any task fails.
 
