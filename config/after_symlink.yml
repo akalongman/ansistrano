@@ -20,6 +20,9 @@
 - include_tasks: "{{ playbook_dir }}/config/tasks/create_supervisor_config.yml"
   when: "app_create_supervisor_config is defined and app_create_supervisor_config|bool == true"
 
+- include_tasks: "{{ playbook_dir }}/config/tasks/reload_supervisor.yml"
+  when: "app_reload_supervisor is defined and app_reload_supervisor|bool == true"
+
 - include_tasks: "{{ playbook_dir }}/config/tasks/restart_supervisor_instance.yml"
   when: "app_restart_supervisor_instance is defined and app_restart_supervisor_instance|bool == true"
 

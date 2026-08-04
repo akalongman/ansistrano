@@ -104,6 +104,7 @@ Steps run after the symlink flip (they operate on the live `current` release):
 | `app_optimize_post` | bool | Warms `view:cache`. |
 | `app_deploy_supervisor_horizon_config` | bool | Renders and installs the Horizon Supervisor config. |
 | `app_deploy_supervisor_reverb_config` | bool | Renders and installs the Reverb Supervisor config. |
+| `app_reload_supervisor` | bool | Runs `supervisorctl reread && supervisorctl update`, applying changed program configs without restarting the service. Escalates unless `app_become_on_reload_supervisor` is false. |
 | `app_restart_supervisor` | bool | Restarts the Supervisor service (name via `app_supervisor_service_name`, default `supervisord`). |
 | `app_restart_queue` | bool | Runs `queue:restart`. |
 | `app_restart_horizon` | bool | Runs `horizon:terminate` so Horizon respawns on the new release. |

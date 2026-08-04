@@ -1,0 +1,14 @@
+---
+
+# Applies changed program configs without restarting the SupervisorD service.
+# `update` only acts on programs whose config actually changed, so unrelated
+# programs (for example another environment sharing the host) keep running.
+
+- name: "APP | Reload SupervisorD Configuration"
+  become: "{{ app_become_on_reload_supervisor | default(true) }}"
+  ansible.builtin.shell: "supervisorctl reread && supervisorctl update"
+  register: supervisor_reload
+  changed_when: "'No config updates to processes' not in supervisor_reload.stdout"
+  tags:
+    - app
+    - post
