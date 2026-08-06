@@ -69,7 +69,7 @@ Set these in your inventory (see `example/hosts.ini`) or in `build/ansible/vars.
 | `app_project_name` | Human readable project name, used in task and notification titles. |
 | `app_environment` | Environment name (`staging`, `production`, ...). Selects template variants. |
 | `app_vars_file` | Path to your project vars file, relative to project root (for example `build/ansible/vars.yml`). |
-| `app_writeable_paths` | List of paths made writeable when `app_set_writeable_permissions` is on. |
+| `app_writeable_paths` | List of paths made writeable when `app_set_writeable_permissions` is on. Relative entries (for example `bootstrap/cache`) are resolved against the new release path; absolute entries are used as given. |
 | `app_deployer_user`, `app_deployer_group` | Ownership applied to created files and directories. Default to `ansible_user`. |
 | `app_slack_token`, `app_slack_channel` | Slack credentials. A defined, non-empty token enables notifications. |
 
