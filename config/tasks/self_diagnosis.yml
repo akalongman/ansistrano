@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Run Self-Diagnostic"
-  shell: "php artisan self-diagnosis {{ app_environment }}"
+  shell: "php artisan self-diagnosis {{ app_environment }} --no-interaction"
   args:
     chdir: "{{ ansistrano_release_path.stdout }}"
   tags:

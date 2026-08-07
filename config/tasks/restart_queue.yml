@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Restart Laravel Queue"
-  shell: "php artisan queue:restart"
+  shell: "php artisan queue:restart --no-interaction"
   args:
     chdir: "{{ app_current_path }}"
   tags:

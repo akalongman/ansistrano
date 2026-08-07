@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Recreate View Cache"
-  shell: "php artisan view:cache"
+  shell: "php artisan view:cache --no-interaction"
   args:
     chdir: "{{ app_current_path }}"
   run_once: true

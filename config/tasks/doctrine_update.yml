@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Update Doctrine Schema"
-  shell: "php artisan doctrine:schema:update --force"
+  shell: "php artisan doctrine:schema:update --force --no-interaction"
   args:
     chdir: "{{ app_current_path }}"
   run_once: true

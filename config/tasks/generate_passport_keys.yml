@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Generate Passport Keys"
-  shell: "php artisan passport:keys"
+  shell: "php artisan passport:keys --no-interaction"
   args:
     chdir: "{{ ansistrano_release_path.stdout }}"
   run_once: true

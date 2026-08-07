@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Generate Doctrine Proxies"
-  shell: "php artisan doctrine:generate:proxies"
+  shell: "php artisan doctrine:generate:proxies --no-interaction"
   args:
     chdir: "{{ ansistrano_release_path.stdout }}"
   run_once: true
@@ -10,7 +10,7 @@
     - pre
 
 - name: "APP | Clear Doctrine Metadata Cache"
-  shell: "php artisan doctrine:clear:metadata:cache"
+  shell: "php artisan doctrine:clear:metadata:cache --no-interaction"
   args:
     chdir: "{{ ansistrano_release_path.stdout }}"
   run_once: true
