@@ -90,7 +90,7 @@ built):
 | `app_symlink_storage_public` | bool | Symlinks `storage/app/public` to `public/storage` in the new release. |
 | `app_doctrine_prepare` | bool | Generates Doctrine proxies and clears the metadata cache. |
 | `app_generate_passport_keys` | bool | Runs `passport:keys` (errors ignored). |
-| `app_optimize_pre` | bool | Warms `config:cache`, `route:cache`, and `event:cache`. Override the routes command with `app_cmd_cache_routes`. |
+| `app_optimize_pre` | bool | Warms `config:cache`, `route:cache`, and `event:cache`. Override the routes command with `app_cmd_cache_routes`, which is run verbatim (see Notes). |
 | `app_run_self_diagnosis` | bool | Runs `php artisan self-diagnosis <env>`. |
 | `app_doctrine_update` | bool | Runs `doctrine:schema:update --force`. |
 
@@ -179,6 +179,14 @@ for the DNS step.
 
 ## Notes
 
+* Every artisan command this wrapper runs is passed `--no-interaction`. Symfony Console 7
+  no longer disables interaction when stdin is not a TTY, so without the flag a command
+  that prompts would read EOF under Ansible and fail with a bare `Aborted.` instead of
+  taking the question default. `app_cmd_cache_routes` is the one exception: it is run
+  verbatim, so add the flag to your own command string if it can prompt. Note that
+  `--no-interaction` is not a substitute for `--force` on commands guarded by Laravel's
+  `ConfirmableTrait` (`migrate`, `db:seed`, `db:wipe`); there it answers the confirmation
+  with "no" and cancels the command.
 * Two task files ship but are not wired into any hook: `composer_optimize.yml` and
   `symlink_uploads.yml`. Include them yourself if you need them.
 * `create_supervisor_config.yml` and `restart_supervisor_instance.yml` are deprecated.
