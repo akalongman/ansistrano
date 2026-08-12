@@ -110,9 +110,15 @@ from this repo. Do not try to add them here.
   operate on the live release, addressed as `{{ app_current_path }}` (which is
   `{{ ansistrano_deploy_to }}/current`; see `optimize_post.yml`, `restart_horizon.yml`,
   `opcache_reset.yml`). Using the wrong one silently targets the wrong release.
-- **Optional privilege escalation.** Many task-level steps make `become` conditional
-  via `app_become_on_*` variables defaulting to `false`, because the deploy user often
-  already owns the paths. Server and dynamic tasks, by contrast, hardcode `become: true`.
+- **Optional privilege escalation.** Many task-level steps make `become` conditional via
+  `app_become_on_*` variables. The default follows who normally owns the target: tasks
+  acting inside the deploy tree default to `false` (`app_become_on_set_permissions`,
+  `app_become_on_cachetool`), tasks writing under `/etc` default to `true`
+  (`app_become_on_supervisor_config`, `app_become_on_reload_supervisor`), so the flag is
+  an opt-out there rather than an opt-in. Remaining server and dynamic tasks (nginx,
+  mounts, folder structure, Route53) still hardcode `become: true`; the supervisor config
+  removal in `dynamic/cleanup/` is the one exception, sharing the deploy-side flag because
+  it targets the same directory.
 - **Tags.** Two axes: lifecycle phase (`pre`, `post`) and concern (`app`, `server`,
   `dynamic`). Use them with `--tags` to run a subset.
 - **`run_once` and delegation.** Cluster-wide, side-effect-once actions (Slack,

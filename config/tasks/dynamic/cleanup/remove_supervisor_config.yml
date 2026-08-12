@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Dynamic | Remove SupervisorD Configuration"
-  become: true
+  become: "{{ app_become_on_supervisor_config | default(true) }}"
   ansible.builtin.file:
     path: "{{ app_supervisor_config_dest | default('/etc/supervisord.d') }}/{{ app_domain }}.{{ app_supervisor_config_ext | default('ini') }}"
     state: absent

@@ -102,8 +102,8 @@ Steps run after the symlink flip (they operate on the live `current` release):
 | `app_reset_opcache` | bool | Resets opcache via `cachetool`. Variant is chosen by presence of `app_fcgi_connection` or `app_cachetool_config`, otherwise CLI. |
 | `app_restart_phpfpm` | bool | Reloads php-fpm through systemctl. |
 | `app_optimize_post` | bool | Warms `view:cache`. |
-| `app_deploy_supervisor_horizon_config` | bool | Renders and installs the Horizon Supervisor config. |
-| `app_deploy_supervisor_reverb_config` | bool | Renders and installs the Reverb Supervisor config. |
+| `app_deploy_supervisor_horizon_config` | bool | Renders and installs the Horizon Supervisor config. Escalates unless `app_become_on_supervisor_config` is false. |
+| `app_deploy_supervisor_reverb_config` | bool | Renders and installs the Reverb Supervisor config. Escalates unless `app_become_on_supervisor_config` is false. |
 | `app_reload_supervisor` | bool | Runs `supervisorctl reread && supervisorctl update`, applying changed program configs without restarting the service. Escalates unless `app_become_on_reload_supervisor` is false. |
 | `app_restart_supervisor` | bool | Restarts the Supervisor service (name via `app_supervisor_service_name`, default `supervisord`). |
 | `app_restart_queue` | bool | Runs `queue:restart`. |
@@ -115,6 +115,12 @@ For the Debian/Ubuntu layout, override both the directory and the extension, for
 `app_supervisor_config_dest: /etc/supervisor/conf.d` and `app_supervisor_config_ext: conf`.
 The same two variables also drive the Horizon and Reverb config filenames and the dynamic
 cleanup that removes them.
+
+Writing those files escalates to root by default, since the destination normally lives under
+`/etc`. Set `app_become_on_supervisor_config: false` when the deploy user already owns
+`app_supervisor_config_dest` and cannot (or should not) use sudo. The flag covers every task
+that touches that directory: the Horizon and Reverb configs, the deprecated
+`app_create_supervisor_config`, and the dynamic cleanup that removes the config again.
 
 The presence of a non-empty `app_slack_token` enables a success notification at the end
 of a deploy and a failure notification if any task fails.

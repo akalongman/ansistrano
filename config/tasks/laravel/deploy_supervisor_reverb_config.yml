@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Deploy SupervisorD Reverb Configuration"
-  become: true
+  become: "{{ app_become_on_supervisor_config | default(true) }}"
   ansible.builtin.template:
     src: "{{ ansistrano_deploy_from }}/{{ app_supervisor_reverb_config_path | default('build/deploy/supervisor/' + app_environment + '-reverb.conf.j2') }}"
     dest: "{{ app_supervisor_config_dest | default('/etc/supervisord.d') }}/{{ app_domain }}-reverb.{{ app_supervisor_config_ext | default('ini') }}"

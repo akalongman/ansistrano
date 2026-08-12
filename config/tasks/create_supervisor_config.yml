@@ -3,7 +3,7 @@
 # Deprecated. Use laravel/* scripts
 
 - name: "APP | Create SupervisorD Configuration"
-  become: true
+  become: "{{ app_become_on_supervisor_config | default(true) }}"
   ansible.builtin.template:
     src: "{{ ansistrano_deploy_from }}/{{ app_supervisor_config_path | default('build/deploy/supervisor/' + app_environment + '.conf.j2') }}"
     dest: "{{ app_supervisor_config_dest | default('/etc/supervisord.d') }}/{{ app_domain }}.{{ app_supervisor_config_ext | default('ini') }}"
