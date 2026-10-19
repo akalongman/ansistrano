@@ -16,6 +16,10 @@ one toggled per server group by a simple variable.
 * Ansible on the control machine (the machine that runs the deploy).
 * The two Galaxy roles listed in `requirements.yml` (`ansistrano.deploy` 3.14.0,
   `ansistrano.rollback` 3.1.0).
+* The `ansible.posix` collection, which ships with the full `ansible` package (on bare
+  `ansible-core`, run `ansible-galaxy collection install ansible.posix`). `deploy.yml`
+  needs it even when `ansistrano_deploy_via` is not `rsync`, because its play sets module
+  defaults for `ansible.posix.synchronize`.
 * SSH access from the control machine to your target servers.
 
 ## Installation
@@ -54,7 +58,10 @@ Configuration flows through two variable namespaces.
 * `ansistrano_*` variables are consumed by the upstream role. They control the release
   mechanics (`ansistrano_deploy_to`, `ansistrano_keep_releases`, `ansistrano_shared_paths`,
   `ansistrano_deploy_via`, and the hook file bindings). Sensible defaults live in
-  `vars/defaults.yml`.
+  `vars/defaults.yml`. That file loads through the play's `vars_files`, which outrank
+  inventory group vars, so a variable it sets can be overridden in your project vars file
+  but not per group in the inventory. `ansistrano_shared_paths` is therefore left to the
+  role's own (empty) default and can be set in either place.
 * `app_*` variables are this wrapper's own convention. They fall into two groups: core
   settings that every deploy needs, and boolean feature toggles that turn individual
   post-deploy steps on or off.
@@ -69,7 +76,9 @@ Set these in your inventory (see `example/hosts.ini`) or in `build/ansible/vars.
 | `app_project_name` | Human readable project name, used in task and notification titles. |
 | `app_environment` | Environment name (`staging`, `production`, ...). Selects template variants. |
 | `app_vars_file` | Path to your project vars file, relative to project root (for example `build/ansible/vars.yml`). |
-| `app_writeable_paths` | List of paths made writeable when `app_set_writeable_permissions` is on. Relative entries (for example `bootstrap/cache`) are resolved against the new release path; absolute entries are used as given. |
+| `app_writeable_paths` | List of paths made writeable when `app_set_writeable_permissions` is on. Relative entries (for example `bootstrap/cache`) are resolved against the new release path; absolute entries are used as given. Empty by default. |
+| `app_writeable_paths_mode` | Mode passed to `chmod -R` for each path in `app_writeable_paths`, `777` by default. Any `chmod` mode works, for example `g+rwX`. Quote an octal mode in YAML (`'0775'`): unquoted, `0775` is read as the integer 509. |
+| `app_verify_host_on_synchronize` | When true, both rsync transfers (the role's release copy and the storage sync) check the server's host key against the control machine's `known_hosts`. Off by default, and then `synchronize` passes `-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null` whatever the inventory's SSH settings say. |
 | `app_deployer_user`, `app_deployer_group` | Ownership applied to created files and directories. Default to `ansible_user`. |
 | `app_slack_token`, `app_slack_channel` | Slack credentials. A defined, non-empty token enables notifications. |
 
@@ -86,7 +95,7 @@ built):
 | Toggle | Type | What it does |
 |---|---|---|
 | `app_sync_storage_folder` | bool | Syncs the local `storage/` into the server's `shared/` before code update. |
-| `app_set_writeable_permissions` | bool | `chmod -R 777` on each path in `app_writeable_paths`. Escalates only if `app_become_on_set_permissions` is true. |
+| `app_set_writeable_permissions` | bool | `chmod -R` with `app_writeable_paths_mode` (default `777`) on each path in `app_writeable_paths`. Escalates only if `app_become_on_set_permissions` is true. |
 | `app_symlink_storage_public` | bool | Symlinks `storage/app/public` to `public/storage` in the new release. |
 | `app_doctrine_prepare` | bool | Generates Doctrine proxies and clears the metadata cache. |
 | `app_generate_passport_keys` | bool | Runs `passport:keys` (errors ignored). |
@@ -100,7 +109,7 @@ Steps run after the symlink flip (they operate on the live `current` release):
 |---|---|---|
 | `app_restart_pm2` | bool | Restarts a PM2 process named by `app_pm2_script_name`. |
 | `app_reset_opcache` | bool | Resets opcache via `cachetool`. Variant is chosen by presence of `app_fcgi_connection` or `app_cachetool_config`, otherwise CLI. |
-| `app_restart_phpfpm` | bool | Reloads php-fpm through systemctl. |
+| `app_restart_phpfpm` | bool | Reloads php-fpm through systemctl (unit name via `app_phpfpm_service_name`, default `php74-php-fpm`). |
 | `app_optimize_post` | bool | Warms `view:cache`. |
 | `app_deploy_supervisor_horizon_config` | bool | Renders and installs the Horizon Supervisor config. Escalates unless `app_become_on_supervisor_config` is false. |
 | `app_deploy_supervisor_reverb_config` | bool | Renders and installs the Reverb Supervisor config. Escalates unless `app_become_on_supervisor_config` is false. |
@@ -197,8 +206,9 @@ for the DNS step.
   `symlink_uploads.yml`. Include them yourself if you need them.
 * `create_supervisor_config.yml` and `restart_supervisor_instance.yml` are deprecated.
   Prefer the Laravel specific Supervisor tasks under `config/tasks/laravel/`.
-* `restart_phpfpm.yml` reloads a hardcoded `php74-php-fpm` unit. Adjust it for your PHP
-  version.
+* `app_phpfpm_service_name` defaults to `php74-php-fpm`, the unit `restart_phpfpm.yml`
+  reloaded before the name became configurable. Set it to your server's unit (for example
+  `php-fpm` or `php8.4-fpm`).
 * The automatic rollback on failure is present but commented out in `on_failure.yml`.
 
 ## License

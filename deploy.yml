@@ -2,6 +2,9 @@
 - name: "Deploy Project"
   hosts: all
   any_errors_fatal: true
+  module_defaults:
+    ansible.posix.synchronize:
+      verify_host: "{{ app_verify_host_on_synchronize | default(false) | bool }}"
   vars_files:
     - "{{ playbook_dir }}/vars/defaults.yml"
     - "{{ app_root_path }}/{{ app_vars_file }}"

@@ -1,7 +1,7 @@
 ---
 
 - name: "APP | Restart php-fpm"
-  shell: "sudo systemctl reload php74-php-fpm"
+  shell: "sudo systemctl reload {{ app_phpfpm_service_name | default('php74-php-fpm') }}"
   tags:
     - app
     - post

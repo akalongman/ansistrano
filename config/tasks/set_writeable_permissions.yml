@@ -2,8 +2,8 @@
 
 - name: "APP | Set permissions to writeable paths"
   become: "{{ app_become_on_set_permissions | default(false) }}"
-  shell: "chmod -R 777 {{ [ansistrano_release_path.stdout, item] | path_join }}"
-  with_items: "{{ app_writeable_paths }}"
+  shell: "chmod -R {{ app_writeable_paths_mode | default('777') }} {{ [ansistrano_release_path.stdout, item] | path_join }}"
+  with_items: "{{ app_writeable_paths | default([]) }}"
   tags:
     - app
     - pre
