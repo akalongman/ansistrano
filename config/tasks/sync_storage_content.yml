@@ -1,12 +1,77 @@
 ---
 
-- name: "APP | Sync Storage Content"
-  synchronize:
-    src: "{{ ansistrano_deploy_from }}/storage"
-    dest: "{{ app_deploy_to }}/shared"
-    archive: no
-    recursive: yes
-  run_once: "{{ app_sync_storage_folder_once | default(false) }}"
+# app_sync_storage_excludes lists paths relative to storage/ that the sync leaves out and that
+# are deleted from the copies a server already holds: shared/storage and the role's rsync
+# cache shared/.shared-copy/storage. Neither rsync removes an excluded path from the
+# receiver (this sync deletes nothing, and the role's release copy runs with --delete, which
+# spares excluded paths), so copies made by earlier deploys would otherwise stay.
+#
+# A string value (for example from `-e key=value`) is read as YAML and must yield a list.
+# Every entry is checked before anything below changes: an empty or absolute entry, one
+# containing "..", or one with a "." or empty component could name storage itself (deleting
+# it whole) or a path outside it.
+# A trailing slash is dropped, so a symlink at the entry is unlinked rather than followed.
+# The tasks below derive their paths from sync_storage_excludes, the one validated value.
+
+- name: "APP | Storage sync"
+  vars:
+    sync_storage_excludes: >-
+      {{ (app_sync_storage_excludes | from_yaml)
+         if (app_sync_storage_excludes | default([], true) is string)
+         else (app_sync_storage_excludes | default([], true)) }}
   tags:
     - app
     - pre
+  block:
+    - name: "APP | Check storage sync exclude list"
+      ansible.builtin.assert:
+        that:
+          - sync_storage_excludes is sequence
+          - sync_storage_excludes is not string
+          - sync_storage_excludes is not mapping
+        fail_msg: "app_sync_storage_excludes must be a list of paths relative to storage/, got {{ sync_storage_excludes | to_json }}"
+        quiet: true
+
+    - name: "APP | Check storage sync exclude entries"
+      ansible.builtin.assert:
+        that:
+          - item is string
+          - item | trim != ''
+          - not item.startswith('/')
+          - "'..' not in item"
+          - "'.' not in item.split('/')"
+          - "'' not in (item | regex_replace('/+$', '')).split('/')"
+        fail_msg: >-
+          app_sync_storage_excludes entry {{ item | to_json }} must be a non-empty path relative
+          to storage/ with no '..', no '.' component and no empty component
+        quiet: true
+      loop: "{{ sync_storage_excludes }}"
+
+    # Runs where the sync runs, so a storage directory several servers share is deleted
+    # from once, as it is synced once.
+    - name: "APP | Delete excluded storage paths"
+      ansible.builtin.file:
+        path: "{{ app_deploy_to }}/shared/storage/{{ item }}"
+        state: absent
+      loop: "{{ sync_storage_excludes | map('regex_replace', '/+$', '') | list }}"
+      run_once: "{{ app_sync_storage_folder_once | default(false) }}"
+
+    # The role's release copy fills this cache on every server, so every server is cleaned.
+    - name: "APP | Delete excluded storage paths from the rsync cache"
+      ansible.builtin.file:
+        path: "{{ app_deploy_to }}/shared/.shared-copy/storage/{{ item }}"
+        state: absent
+      loop: "{{ sync_storage_excludes | map('regex_replace', '/+$', '') | list }}"
+
+    # The source has no trailing slash, so rsync sends it as storage/...: an exclude anchored
+    # at /storage/ matches the entry's own path and no same-named path deeper in the tree.
+    - name: "APP | Sync Storage Content"
+      synchronize:
+        src: "{{ ansistrano_deploy_from }}/storage"
+        dest: "{{ app_deploy_to }}/shared"
+        archive: no
+        recursive: yes
+        rsync_opts: >-
+          {{ sync_storage_excludes | map('regex_replace', '/+$', '')
+             | map('regex_replace', '^', '--exclude=/storage/') | map('quote') | list }}
+      run_once: "{{ app_sync_storage_folder_once | default(false) }}"

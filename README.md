@@ -78,6 +78,7 @@ Set these in your inventory (see `example/hosts.ini`) or in `build/ansible/vars.
 | `app_vars_file` | Path to your project vars file, relative to project root (for example `build/ansible/vars.yml`). |
 | `app_writeable_paths` | List of paths made writeable when `app_set_writeable_permissions` is on. Relative entries (for example `bootstrap/cache`) are resolved against the new release path; absolute entries are used as given. Empty by default. |
 | `app_writeable_paths_mode` | Mode passed to `chmod -R` for each path in `app_writeable_paths`, `777` by default. Any `chmod` mode works, for example `g+rwX`. Quote an octal mode in YAML (`'0775'`): unquoted, `0775` is read as the integer 509. |
+| `app_sync_storage_excludes` | List of paths relative to `storage/` that the storage sync (`app_sync_storage_folder`) leaves out and deletes from the copies a server already holds. Empty by default. See [Keeping paths out of the storage sync](#keeping-paths-out-of-the-storage-sync). |
 | `app_verify_host_on_synchronize` | When true, both rsync transfers (the role's release copy and the storage sync) check the server's host key against the control machine's `known_hosts`. Off by default, and then `synchronize` passes `-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null` whatever the inventory's SSH settings say. |
 | `app_deployer_user`, `app_deployer_group` | Ownership applied to created files and directories. Default to `ansible_user`. |
 | `app_slack_token`, `app_slack_channel` | Slack credentials. A defined, non-empty token enables notifications. |
@@ -94,7 +95,7 @@ built):
 
 | Toggle | Type | What it does |
 |---|---|---|
-| `app_sync_storage_folder` | bool | Syncs the local `storage/` into the server's `shared/` before code update. |
+| `app_sync_storage_folder` | bool | Syncs the local `storage/` into the server's `shared/` before code update, leaving out the paths in `app_sync_storage_excludes`. |
 | `app_set_writeable_permissions` | bool | `chmod -R` with `app_writeable_paths_mode` (default `777`) on each path in `app_writeable_paths`. Escalates only if `app_become_on_set_permissions` is true. |
 | `app_symlink_storage_public` | bool | Symlinks `storage/app/public` to `public/storage` in the new release. |
 | `app_doctrine_prepare` | bool | Generates Doctrine proxies and clears the metadata cache. |
@@ -133,6 +134,40 @@ that touches that directory: the Horizon and Reverb configs, the deprecated
 
 The presence of a non-empty `app_slack_token` enables a success notification at the end
 of a deploy and a failure notification if any task fails.
+
+### Keeping paths out of the storage sync
+
+`app_sync_storage_excludes` keeps paths under `storage/` off the servers, for example a
+data snapshot that only the deploy machine reads. Set it per group in the inventory, where
+a list literal is read as a list, or as a YAML list in your project vars file:
+
+```ini
+[backend:vars]
+app_sync_storage_folder=true
+app_sync_storage_excludes=["framework/migration"]
+```
+
+Each entry is passed to the storage sync as an exclude anchored at `storage/`
+(`--exclude=/storage/framework/migration`), so it matches that path only, not a
+`framework/migration` deeper in the tree. On every deploy the same path is also deleted
+from `shared/storage/` and from the role's rsync cache `shared/.shared-copy/storage/`,
+because neither rsync removes an excluded path from a server: the storage sync deletes
+nothing, and the role's release copy runs with `--delete`, which spares excluded paths.
+The deletion under `shared/storage/` runs once per deploy when
+`app_sync_storage_folder_once` is true, as the sync itself does; the rsync cache is cleaned
+on every server.
+
+* Entries are paths, not rsync patterns, so avoid `*`, `?` and `[`. A trailing slash is
+  ignored.
+* An entry that is empty, absolute, contains `..`, or has a `.` or empty component (`./x`,
+  `a//b`) fails the deploy before the sync or any deletion runs, since it could name
+  `storage/` itself or a path outside it.
+* A value that arrives as a string (for example `-e 'app_sync_storage_excludes=["x"]'`) is
+  read as YAML and must yield a list.
+* The role's release copy fills `shared/.shared-copy` with the whole project, `storage/`
+  included. Exclude the same paths from it through `ansistrano_rsync_extra_params` (for
+  example an `--exclude-from` file listing `/storage/framework/migration`), or every
+  deploy copies them back into the cache.
 
 ## Usage
 

@@ -10,10 +10,12 @@ app_task_name: "Deploy {{ app_project_name }}"
 app_root_path: "{{ ansistrano_deploy_from }}"
 app_current_path: "{{ ansistrano_deploy_to }}/{{ ansistrano_current_dir }}"
 
-# ansistrano_shared_paths and app_writeable_paths are deliberately not set here. This file
-# loads through the play's vars_files, which outrank inventory group vars, so a value set
-# here could never be overridden per group. Their empty defaults come from the role
-# default and from `| default([])` at the point of use.
+# ansistrano_shared_paths, app_writeable_paths and app_sync_storage_excludes are deliberately
+# not set here. This file loads through the play's vars_files, which outrank inventory group
+# vars, so a value set here could never be overridden per group. Their empty defaults come
+# from the role default and from `| default([])` at the point of use. app_sync_storage_excludes
+# (default []) lists paths relative to storage/ that the storage sync leaves out and deletes
+# from the servers' copies; see config/tasks/sync_storage_content.yml.
 ansistrano_shared_files: []
 
 ansistrano_ensure_shared_paths_exist: yes
