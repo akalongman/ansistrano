@@ -157,11 +157,13 @@ The deletion under `shared/storage/` runs once per deploy when
 `app_sync_storage_folder_once` is true, as the sync itself does; the rsync cache is cleaned
 on every server.
 
-* Entries are paths, not rsync patterns, so avoid `*`, `?` and `[`. A trailing slash is
-  ignored.
-* An entry that is empty, absolute, contains `..`, or has a `.` or empty component (`./x`,
-  `a//b`) fails the deploy before the sync or any deletion runs, since it could name
-  `storage/` itself or a path outside it.
+* Entries are paths, not rsync patterns. A trailing slash is ignored.
+* An entry that is empty or absolute, or has an empty, `.` or `..` component (`a//b`, `./x`,
+  `a/../b`), fails the deploy before the sync or any deletion runs, since it could name
+  `storage/` itself or a path outside it. A `..` inside a name (`a..b`) is allowed.
+* An entry containing any of `*`, `?`, `[`, `\` or `$` fails the deploy the same way. rsync
+  reads those characters as a pattern, and `$NAME` is expanded as a variable, while the
+  deletion takes the path literally, so the exclusion and the deletion would disagree.
 * A value that arrives as a string (for example `-e 'app_sync_storage_excludes=["x"]'`) is
   read as YAML and must yield a list.
 * The role's release copy fills `shared/.shared-copy` with the whole project, `storage/`

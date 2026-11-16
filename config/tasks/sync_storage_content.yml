@@ -7,9 +7,11 @@
 # spares excluded paths), so copies made by earlier deploys would otherwise stay.
 #
 # A string value (for example from `-e key=value`) is read as YAML and must yield a list.
-# Every entry is checked before anything below changes: an empty or absolute entry, one
-# containing "..", or one with a "." or empty component could name storage itself (deleting
-# it whole) or a path outside it.
+# Every entry is checked before anything below changes. An empty or absolute entry, or one
+# with an empty, "." or ".." component, could name storage itself (deleting it whole) or a
+# path outside it. An entry containing *, ?, [, \ or $ is refused too: rsync reads those as a
+# pattern (and run_command and the file module expand $NAME), while the deletion reads the
+# path literally, so the exclusion and the deletion would disagree.
 # A trailing slash is dropped, so a symlink at the entry is unlinked rather than followed.
 # The tasks below derive their paths from sync_storage_excludes, the one validated value.
 
@@ -38,12 +40,15 @@
           - item is string
           - item | trim != ''
           - not item.startswith('/')
-          - "'..' not in item"
+          - "'..' not in item.split('/')"
           - "'.' not in item.split('/')"
           - "'' not in (item | regex_replace('/+$', '')).split('/')"
+          # The regex is [*?\[\\$]. A conditional's string literal unescapes \\ to \, so every
+          # backslash is doubled here; written singly, a backslash in an entry would pass.
+          - item is not search('[*?\\[\\\\$]')
         fail_msg: >-
           app_sync_storage_excludes entry {{ item | to_json }} must be a non-empty path relative
-          to storage/ with no '..', no '.' component and no empty component
+          to storage/ with no empty, '.' or '..' component and none of *, ?, [, \ or $
         quiet: true
       loop: "{{ sync_storage_excludes }}"
 
