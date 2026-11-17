@@ -9,9 +9,10 @@
 # A string value (for example from `-e key=value`) is read as YAML and must yield a list.
 # Every entry is checked before anything below changes. An empty or absolute entry, or one
 # with an empty, "." or ".." component, could name storage itself (deleting it whole) or a
-# path outside it. An entry containing *, ?, [, \ or $ is refused too: rsync reads those as a
-# pattern (and run_command and the file module expand $NAME), while the deletion reads the
-# path literally, so the exclusion and the deletion would disagree.
+# path outside it. An entry containing *, ?, [, \ or $ is refused too: rsync reads *, ?, [
+# and \ as a pattern while the deletion reads them literally, and $NAME is expanded on the
+# deploy host for the exclusion (run_command) but on the server for the deletion (the file
+# module), so the exclusion and the deletion would disagree.
 # A trailing slash is dropped, so a symlink at the entry is unlinked rather than followed.
 # The tasks below derive their paths from sync_storage_excludes, the one validated value.
 

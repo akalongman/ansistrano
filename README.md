@@ -162,8 +162,9 @@ on every server.
   `a/../b`), fails the deploy before the sync or any deletion runs, since it could name
   `storage/` itself or a path outside it. A `..` inside a name (`a..b`) is allowed.
 * An entry containing any of `*`, `?`, `[`, `\` or `$` fails the deploy the same way. rsync
-  reads those characters as a pattern, and `$NAME` is expanded as a variable, while the
-  deletion takes the path literally, so the exclusion and the deletion would disagree.
+  reads `*`, `?`, `[` and `\` as a pattern while the deletion takes them literally, and
+  `$NAME` is expanded on the deploy host for the exclusion but on the server for the
+  deletion, so the exclusion and the deletion would disagree.
 * A value that arrives as a string (for example `-e 'app_sync_storage_excludes=["x"]'`) is
   read as YAML and must yield a list.
 * The role's release copy fills `shared/.shared-copy` with the whole project, `storage/`
